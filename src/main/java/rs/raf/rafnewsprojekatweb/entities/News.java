@@ -3,6 +3,8 @@ package rs.raf.rafnewsprojekatweb.entities;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class News {
 
@@ -28,6 +30,7 @@ public class News {
     @NotEmpty
     private String categoryName;
 
+    private List<String> keyWords = new ArrayList<>();
 
     public News(Integer id, String title, String text, Date date, Integer numberOfVisits, String authorEmail, String categoryName) {
         this.id = id;
@@ -37,6 +40,14 @@ public class News {
         this.numberOfVisits = numberOfVisits;
         this.authorEmail = authorEmail;
         this.categoryName = categoryName;
+    }
+
+    public List<String> getKeyWords() {
+        return keyWords;
+    }
+
+    public void setKeyWords(List<String> keyWords) {
+        this.keyWords = keyWords;
     }
 
     public News(String title, String text, Date date, Integer numberOfVisits, String authorEmail, String categoryName) {

@@ -29,4 +29,16 @@ public class CategoryResource {
         return this.categoryService.addCategory(category);
     }
 
+    @DELETE
+    @Path("/{name}")
+    public void deleteCategory(@PathParam("name") String name){
+        categoryService.deleteCategory(name);
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Category updateCategory(@Valid Category category){
+        return categoryService.updateCategory(category);
+    }
+
 }

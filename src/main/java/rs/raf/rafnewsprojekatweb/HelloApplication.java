@@ -9,12 +9,11 @@ import rs.raf.rafnewsprojekatweb.repositories.comments.CommentRepository;
 import rs.raf.rafnewsprojekatweb.repositories.comments.MySqlCommentRepository;
 import rs.raf.rafnewsprojekatweb.repositories.news.MySqlNewsRepository;
 import rs.raf.rafnewsprojekatweb.repositories.news.NewsRepository;
+import rs.raf.rafnewsprojekatweb.repositories.tags.MySqlTagRepository;
+import rs.raf.rafnewsprojekatweb.repositories.tags.TagsRepository;
 import rs.raf.rafnewsprojekatweb.repositories.user.MySqlUserRepository;
 import rs.raf.rafnewsprojekatweb.repositories.user.UserRepository;
-import rs.raf.rafnewsprojekatweb.services.CategoryService;
-import rs.raf.rafnewsprojekatweb.services.CommentService;
-import rs.raf.rafnewsprojekatweb.services.NewsService;
-import rs.raf.rafnewsprojekatweb.services.UserService;
+import rs.raf.rafnewsprojekatweb.services.*;
 
 import javax.inject.Singleton;
 import javax.ws.rs.ApplicationPath;
@@ -35,11 +34,13 @@ public class HelloApplication extends ResourceConfig {
                 this.bind(MySqlCommentRepository.class).to(CommentRepository.class).in(Singleton.class);
                 this.bind(MySqlNewsRepository.class).to(NewsRepository.class).in(Singleton.class);
                 this.bind(MySqlCategoriesRepository.class).to(CategoriesRepository.class).in(Singleton.class);
+                this.bind(MySqlTagRepository.class).to(TagsRepository.class).in(Singleton.class);
 
                 this.bindAsContract(UserService.class);
                 this.bindAsContract(CommentService.class);
                 this.bindAsContract(NewsService.class);
                 this.bindAsContract(CategoryService.class);
+                this.bindAsContract(TagService.class);
             }
         };
         register(binder);

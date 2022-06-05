@@ -1,14 +1,14 @@
 package rs.raf.rafnewsprojekatweb.resources;
 
+import rs.raf.rafnewsprojekatweb.dto.UserUpdateDto;
+import rs.raf.rafnewsprojekatweb.entities.News;
 import rs.raf.rafnewsprojekatweb.entities.User;
 import rs.raf.rafnewsprojekatweb.requests.LoginRequest;
 import rs.raf.rafnewsprojekatweb.services.UserService;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
@@ -43,5 +43,19 @@ public class UserResource {
     public User addUser(@Valid User user) {
         return this.userService.addUser(user);
     }
+
+    @DELETE
+    @Path("/{email}")
+    public void deleteUser(@PathParam("email") String email){
+        userService.deleteUser(email);
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public UserUpdateDto updateUser(@Valid UserUpdateDto userUpdateDto){
+        return userService.updateUser(userUpdateDto);
+    }
+
 
 }

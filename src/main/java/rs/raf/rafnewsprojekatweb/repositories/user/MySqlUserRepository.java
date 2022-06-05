@@ -1,5 +1,6 @@
 package rs.raf.rafnewsprojekatweb.repositories.user;
 
+import rs.raf.rafnewsprojekatweb.dto.UserUpdateDto;
 import rs.raf.rafnewsprojekatweb.entities.User;
 import rs.raf.rafnewsprojekatweb.repositories.MySqlAbstractRepository;
 
@@ -79,5 +80,53 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements User
         }
 
         return user;
+    }
+
+    @Override
+    public void delete(String email) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = this.newConnection();
+
+            preparedStatement = connection.prepareStatement("DELETE FROM users where email = ?");
+            preparedStatement.setString(1, email);
+            preparedStatement.executeUpdate();
+
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeConnection(connection);
+        }
+    }
+
+    @Override
+    public UserUpdateDto updateUser(UserUpdateDto userUpdateDto) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = this.newConnection();
+            preparedStatement = connection.prepareStatement("UPDATE users SET email = ?, first_name= ?, last_name= ?" +
+                    ", type= ?, active = ? WHERE id = ?");
+            preparedStatement.setString(1, userUpdateDto.getEmail());
+            preparedStatement.setString(2, userUpdateDto.getFirstName());
+            preparedStatement.setString(3, userUpdateDto.getLastName());
+            preparedStatement.setString(4, userUpdateDto.getType());
+            preparedStatement.setBoolean(5, userUpdateDto.getActive());
+            preparedStatement.setInt(6, userUpdateDto.getId());
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeConnection(connection);
+        }
+
+        return userUpdateDto;
     }
 }

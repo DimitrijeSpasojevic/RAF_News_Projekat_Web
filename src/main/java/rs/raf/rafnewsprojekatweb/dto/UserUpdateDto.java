@@ -1,15 +1,13 @@
-package rs.raf.rafnewsprojekatweb.entities;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.codec.digest.DigestUtils;
+package rs.raf.rafnewsprojekatweb.dto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 
-public class User {
+public class UserUpdateDto {
 
+
+    @NotNull(message = "Id field is required")
+    private Integer id;
     @NotNull(message = "email field is required")
     @NotEmpty(message = "email field is required")
     private String email;
@@ -24,23 +22,42 @@ public class User {
     private String type;
     @NotNull(message = "active field is required")
     private Boolean active;
-    @NotNull(message = "password field is required")
-    @NotEmpty(message = "password field is required")
-    private String password;
 
-    public User(){
-
+    public UserUpdateDto(Integer id, String email, String firstName, String lastName, String type) {
+        this.id = id;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.type = type;
     }
 
-    public User(String email, String firstName, String lastName, String type, Boolean active, String password) {
+    public UserUpdateDto(Integer id, String email, String firstName, String lastName, String type, Boolean active) {
+        this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.type = type;
         this.active = active;
-        this.password = password;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public UserUpdateDto() {
+    }
 
     public String getEmail() {
         return email;
@@ -72,21 +89,5 @@ public class User {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

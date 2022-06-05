@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import org.apache.commons.codec.digest.DigestUtils;
+import rs.raf.rafnewsprojekatweb.dto.UserUpdateDto;
 import rs.raf.rafnewsprojekatweb.entities.User;
 import rs.raf.rafnewsprojekatweb.repositories.user.UserRepository;
 
@@ -46,10 +47,10 @@ public class UserService {
                 .build();
         DecodedJWT jwt = verifier.verify(token);
 
-        String username = jwt.getSubject();
-//        jwt.getClaim("role").asString();
+        String email = jwt.getSubject();
+        jwt.getClaim("type").asString();
 
-        User user = this.userRepository.findUser(username);
+        User user = this.userRepository.findUser(email);
 
         if (user == null){
             return false;
@@ -62,5 +63,13 @@ public class UserService {
        String password = DigestUtils.sha256Hex(user.getPassword());
        user.setPassword(password);
        return userRepository.addUser(user);
+    }
+
+    public void deleteUser(String email){
+        userRepository.delete(email);
+    }
+
+    public UserUpdateDto updateUser(UserUpdateDto userUpdateDto){
+       return userRepository.updateUser(userUpdateDto);
     }
 }

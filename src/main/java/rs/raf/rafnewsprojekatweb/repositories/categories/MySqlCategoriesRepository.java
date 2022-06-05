@@ -20,8 +20,8 @@ public class MySqlCategoriesRepository extends MySqlAbstractRepository implement
         ResultSet resultSet = null;
         try {
             connection = this.newConnection();
-
-            preparedStatement = connection.prepareStatement("SELECT * FROM categories");
+            String[] generatedColumns = {"id"};
+            preparedStatement = connection.prepareStatement("SELECT * FROM categories", generatedColumns);
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
@@ -29,6 +29,7 @@ public class MySqlCategoriesRepository extends MySqlAbstractRepository implement
                 String description = resultSet.getString("description");
 
                 Category category = new Category(name,description);
+                category.setId(resultSet.getInt(3));
                 categories.add(category);
             }
 
@@ -48,15 +49,68 @@ public class MySqlCategoriesRepository extends MySqlAbstractRepository implement
 
     @Override
     public Category addCategory(Category category) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = this.newConnection();
 
+            String[] generatedColumns = {"id"};
+
+            preparedStatement = connection.prepareStatement("INSERT INTO categories (name, description) VALUES(?, ?)" ,generatedColumns);
+            preparedStatement.setString(1, category.getName());
+            preparedStatement.setString(2, category.getDescription());
+            preparedStatement.executeUpdate();
+
+            resultSet = preparedStatement.getGeneratedKeys();
+
+            if (resultSet.next()) {
+                category.setId(resultSet.getInt(1));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeResultSet(resultSet);
+            this.closeConnection(connection);
+        }
+
+        return category;
+    }
+
+    @Override
+    public void deleteCategory(String name) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
             connection = this.newConnection();
 
-            preparedStatement = connection.prepareStatement("INSERT INTO categories (name, description) VALUES(?, ?)" );
+            preparedStatement = connection.prepareStatement("DELETE FROM categories where name = ?");
+            preparedStatement.setString(1, name);
+            preparedStatement.executeUpdate();
+
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeConnection(connection);
+        }
+    }
+
+    @Override
+    public Category updateCategory(Category category) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = this.newConnection();
+
+            preparedStatement = connection.prepareStatement("UPDATE categories SET name = ?, description= ? WHERE id = ?" );
             preparedStatement.setString(1, category.getName());
             preparedStatement.setString(2, category.getDescription());
+            preparedStatement.setInt(3, category.getId());
 
             preparedStatement.executeUpdate();
 

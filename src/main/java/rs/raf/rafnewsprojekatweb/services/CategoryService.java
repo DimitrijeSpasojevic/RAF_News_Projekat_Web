@@ -19,4 +19,12 @@ public class CategoryService {
         return categoriesRepository.addCategory(category);
     }
 
+    public Category updateCategory(Category category){
+        return categoriesRepository.updateCategory(category);
+    }
+
+    public void deleteCategory(String name){
+        categoriesRepository.deleteCategory(name);
+    }
+
 }

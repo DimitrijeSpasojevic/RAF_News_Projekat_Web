@@ -9,4 +9,9 @@ public interface CategoriesRepository {
     List<Category> getAll();
 
     Category addCategory(Category category);
+
+    void deleteCategory(String name);
+
+    Category updateCategory(Category category);
+
 }
