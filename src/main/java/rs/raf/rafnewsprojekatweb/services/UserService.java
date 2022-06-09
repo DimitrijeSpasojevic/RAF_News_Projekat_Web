@@ -5,12 +5,14 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import org.apache.commons.codec.digest.DigestUtils;
+import rs.raf.rafnewsprojekatweb.dto.UserDto;
 import rs.raf.rafnewsprojekatweb.dto.UserUpdateDto;
 import rs.raf.rafnewsprojekatweb.entities.User;
 import rs.raf.rafnewsprojekatweb.repositories.user.UserRepository;
 
 import javax.inject.Inject;
 import java.util.Date;
+import java.util.List;
 
 public class UserService {
 
@@ -21,7 +23,7 @@ public class UserService {
         String hashedPassword = DigestUtils.sha256Hex(password);
 
         User user = this.userRepository.findUser(email);
-        if (user == null || !user.getPassword().equals(hashedPassword)) {
+        if (user == null || !user.getPassword().equals(hashedPassword) || user.getActive() == Boolean.FALSE) {
             return null;
         }
 
@@ -52,7 +54,7 @@ public class UserService {
 
         User user = this.userRepository.findUser(email);
 
-        if (user == null){
+        if (!user.getType().equalsIgnoreCase("admin")){
             return false;
         }
 
@@ -71,5 +73,9 @@ public class UserService {
 
     public UserUpdateDto updateUser(UserUpdateDto userUpdateDto){
        return userRepository.updateUser(userUpdateDto);
+    }
+
+    public List<UserDto> getAllUsers(int pageNum){
+        return userRepository.getAllUsers(pageNum);
     }
 }

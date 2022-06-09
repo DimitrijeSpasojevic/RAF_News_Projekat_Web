@@ -1,5 +1,6 @@
 package rs.raf.rafnewsprojekatweb.repositories.user;
 
+import rs.raf.rafnewsprojekatweb.dto.UserDto;
 import rs.raf.rafnewsprojekatweb.dto.UserUpdateDto;
 import rs.raf.rafnewsprojekatweb.entities.User;
 import rs.raf.rafnewsprojekatweb.repositories.MySqlAbstractRepository;
@@ -8,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MySqlUserRepository extends MySqlAbstractRepository implements UserRepository {
     @Override
@@ -128,5 +131,44 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements User
         }
 
         return userUpdateDto;
+    }
+
+    @Override
+    public List<UserDto> getAllUsers(int pageNum) {
+        List<UserDto> users = new ArrayList<>();
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = this.newConnection();
+            String[] generatedColumns = {"id"};
+            preparedStatement = connection.prepareStatement("SELECT * FROM users LIMIT 5 OFFSET ?", generatedColumns);
+            preparedStatement.setInt(1, pageNum * 5);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String email = resultSet.getString("email");
+                String firstName = resultSet.getString("first_name");
+                String lastName = resultSet.getString("last_name");
+                String type = resultSet.getString("type");
+                Boolean isActive = resultSet.getBoolean("active");
+                UserDto userDto = new UserDto(email,firstName,lastName,type,isActive);
+                userDto.setId(resultSet.getInt("id"));
+                users.add(userDto);
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeResultSet(resultSet);
+            this.closeConnection(connection);
+        }
+
+        return users;
     }
 }

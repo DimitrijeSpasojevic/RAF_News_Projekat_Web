@@ -1,5 +1,6 @@
 package rs.raf.rafnewsprojekatweb.resources;
 
+import rs.raf.rafnewsprojekatweb.dto.UserDto;
 import rs.raf.rafnewsprojekatweb.dto.UserUpdateDto;
 import rs.raf.rafnewsprojekatweb.entities.News;
 import rs.raf.rafnewsprojekatweb.entities.User;
@@ -12,6 +13,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Path("/users")
@@ -55,6 +57,13 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public UserUpdateDto updateUser(@Valid UserUpdateDto userUpdateDto){
         return userService.updateUser(userUpdateDto);
+    }
+
+    @GET
+    @Path("offset/{offset}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<UserDto> getAllUsers(@PathParam("offset") Integer offset){
+        return userService.getAllUsers(offset);
     }
 
 

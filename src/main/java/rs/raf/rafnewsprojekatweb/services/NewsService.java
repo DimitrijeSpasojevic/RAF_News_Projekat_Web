@@ -13,6 +13,7 @@ import rs.raf.rafnewsprojekatweb.repositories.tags.TagsRepository;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +32,16 @@ public class NewsService {
     }
 
     public List<News> getAll(int offset){
-        return newsRepository.getAll(offset);
+        List<News> newsList = newsRepository.getAll(offset);
+
+        for(News news: newsList){
+            List<Tag> tags = tagsRepository.getTagsOnNews(news.getId());
+            List<String> keyWords = tags.stream().map(Tag::getKeyWord).collect(Collectors.toList());
+            news.setKeyWords(keyWords);
+        }
+
+        List<News> newsListSorted = newsList.stream().sorted(Comparator.comparing(News::getDate)).collect(Collectors.toList());
+        return newsListSorted;
     }
 
     public List<News> getAllFromCategory(int page, String categoryName){
@@ -47,6 +57,10 @@ public class NewsService {
         news.setDate(newsFromDb.getDate());
         news.setNumberOfVisits(newsFromDb.getNumberOfVisits());
         return newsRepository.updateNews(news);
+    }
+
+    public News getNewsById(int id){
+        return newsRepository.getNewsById(id);
     }
 
     public List<News> getAllNewsWithTag(String keyWord){

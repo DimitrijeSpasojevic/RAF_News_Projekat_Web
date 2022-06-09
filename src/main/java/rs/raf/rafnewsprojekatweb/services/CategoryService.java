@@ -15,6 +15,10 @@ public class CategoryService {
         return categoriesRepository.getAll();
     }
 
+    public List<Category> getALlCategories(int pageNum){
+        return categoriesRepository.getAll(pageNum);
+    }
+
     public Category addCategory(Category category){
         return categoriesRepository.addCategory(category);
     }

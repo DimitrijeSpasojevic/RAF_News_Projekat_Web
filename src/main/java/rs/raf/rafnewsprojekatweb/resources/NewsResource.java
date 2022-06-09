@@ -27,6 +27,13 @@ public class NewsResource {
         return newsService.getAll(offset);
     }
 
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public News getNewsById(@PathParam("id") Integer id) {
+        return newsService.getNewsById(id);
+    }
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public News addNews(@Valid News news) {
@@ -66,6 +73,7 @@ public class NewsResource {
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public News updateNews(@Valid News news){
         tagService.deleteAndInsertAll(news.getKeyWords(),news.getId());
         return newsService.updateNews(news);

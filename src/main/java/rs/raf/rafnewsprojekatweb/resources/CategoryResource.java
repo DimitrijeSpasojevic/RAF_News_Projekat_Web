@@ -18,10 +18,15 @@ public class CategoryResource {
     private CategoryService categoryService;
 
     @GET
+    @Path("offset/{offset}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Category> all() {
-        return categoryService.getALlCategories();
+    public List<Category> all(@PathParam("offset") Integer offset) {
+        return categoryService.getALlCategories(offset);
     }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Category> all() { return categoryService.getALlCategories(); }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -37,6 +42,7 @@ public class CategoryResource {
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Category updateCategory(@Valid Category category){
         return categoryService.updateCategory(category);
     }

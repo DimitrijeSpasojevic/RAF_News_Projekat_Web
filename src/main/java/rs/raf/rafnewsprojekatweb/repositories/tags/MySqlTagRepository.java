@@ -35,7 +35,6 @@ public class MySqlTagRepository extends MySqlAbstractRepository implements TagsR
 
     @Override
     public void deleteAllOnNews(int newsId) {
-        //todo test
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
