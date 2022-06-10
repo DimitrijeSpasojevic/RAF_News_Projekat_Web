@@ -8,6 +8,10 @@ public interface NewsRepository {
 
     List<News> getAll(int offset);
 
+    List<News> getMostVisitedForLastThirtyDays();
+
+    List<News> getFirstTenByDate();
+
     News addNews(News news);
 
     List<News> getAllFromCategory(int page, String categoryName);

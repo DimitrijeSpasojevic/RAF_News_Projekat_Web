@@ -28,6 +28,19 @@ public class NewsResource {
     }
 
     @GET
+    @Path("most-visited")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<News> getMostVisitedForLastThirtyDays() {
+        return newsService.getMostVisitedForLastThirtyDays();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<News> getFirstTenByDate() {
+        return newsService.getFirstTenByDate();
+    }
+
+    @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public News getNewsById(@PathParam("id") Integer id) {

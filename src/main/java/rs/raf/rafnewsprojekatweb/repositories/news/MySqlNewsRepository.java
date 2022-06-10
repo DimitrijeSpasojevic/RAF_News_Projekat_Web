@@ -49,6 +49,84 @@ public class MySqlNewsRepository extends MySqlAbstractRepository implements News
     }
 
     @Override
+    public List<News> getMostVisitedForLastThirtyDays() {
+        List<News> news = new ArrayList<>();
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = this.newConnection();
+
+            preparedStatement = connection.prepareStatement("SELECT * FROM news WHERE date between DATE_SUB(CURDATE(), INTERVAL 30 DAY) and CURDATE() ORDER BY number_of_visits DESC LIMIT 10;");
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Integer id = resultSet.getInt("id");
+                String title = resultSet.getString("title");
+                String text = resultSet.getString("text");
+                Date date = resultSet.getDate("date");
+                Integer numberOfVisits = resultSet.getInt("number_of_visits");
+                String author = resultSet.getString("author_email");
+                String categoryName = resultSet.getString("category_name");
+                News news1 = new News(id,title,text,date,numberOfVisits,author,categoryName);
+                news.add(news1);
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeResultSet(resultSet);
+            this.closeConnection(connection);
+        }
+
+        return news;
+    }
+
+    @Override
+    public List<News> getFirstTenByDate() {
+        List<News> news = new ArrayList<>();
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = this.newConnection();
+
+            preparedStatement = connection.prepareStatement("SELECT * FROM news ORDER BY date DESC LIMIT 10;");
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Integer id = resultSet.getInt("id");
+                String title = resultSet.getString("title");
+                String text = resultSet.getString("text");
+                Date date = resultSet.getDate("date");
+                Integer numberOfVisits = resultSet.getInt("number_of_visits");
+                String author = resultSet.getString("author_email");
+                String categoryName = resultSet.getString("category_name");
+                News news1 = new News(id,title,text,date,numberOfVisits,author,categoryName);
+                news.add(news1);
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeResultSet(resultSet);
+            this.closeConnection(connection);
+        }
+
+        return news;
+    }
+
+    @Override
     public News addNews(News news) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;

@@ -31,6 +31,28 @@ public class NewsService {
        return newsRepository.addNews(news);
     }
 
+    public List<News> getMostVisitedForLastThirtyDays() {
+        List<News> newsList = newsRepository.getMostVisitedForLastThirtyDays();
+
+        for(News news: newsList){
+            List<Tag> tags = tagsRepository.getTagsOnNews(news.getId());
+            List<String> keyWords = tags.stream().map(Tag::getKeyWord).collect(Collectors.toList());
+            news.setKeyWords(keyWords);
+        }
+        return newsList;
+    }
+
+    public List<News> getFirstTenByDate(){
+        List<News> newsList = newsRepository.getFirstTenByDate();
+
+        for(News news: newsList){
+            List<Tag> tags = tagsRepository.getTagsOnNews(news.getId());
+            List<String> keyWords = tags.stream().map(Tag::getKeyWord).collect(Collectors.toList());
+            news.setKeyWords(keyWords);
+        }
+        return newsList;
+    }
+
     public List<News> getAll(int offset){
         List<News> newsList = newsRepository.getAll(offset);
 
