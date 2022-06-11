@@ -266,6 +266,43 @@ public class MySqlNewsRepository extends MySqlAbstractRepository implements News
     }
 
     @Override
+    public News updateNumberOfVisits(News news) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = this.newConnection();
+
+            String[] generatedColumns = {"id"};
+
+            preparedStatement = connection
+                    .prepareStatement("UPDATE news SET number_of_visits = ? WHERE id = ?", generatedColumns);
+            preparedStatement.setInt(1, news.getNumberOfVisits() + 1);
+            preparedStatement.setInt(2, news.getId());
+
+            preparedStatement.executeUpdate();
+            resultSet = preparedStatement.getGeneratedKeys();
+
+            if (resultSet.next()) {
+                news.setTitle(resultSet.getString("title"));
+                news.setText(resultSet.getString("text"));
+                news.setAuthorEmail(resultSet.getString("author_email"));
+                news.setCategoryName(resultSet.getString("category_name"));
+                news.setId(resultSet.getInt(1));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeResultSet(resultSet);
+            this.closeConnection(connection);
+        }
+
+        return news;
+    }
+
+    @Override
     public News getNewsById(int id) {
         News news = null;
 

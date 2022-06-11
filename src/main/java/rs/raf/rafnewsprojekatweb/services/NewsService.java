@@ -42,6 +42,10 @@ public class NewsService {
         return newsList;
     }
 
+    public News updateNumberOfVisits(News news){
+        return newsRepository.updateNumberOfVisits(news);
+    }
+
     public List<News> getFirstTenByDate(){
         List<News> newsList = newsRepository.getFirstTenByDate();
 
@@ -80,6 +84,7 @@ public class NewsService {
         news.setNumberOfVisits(newsFromDb.getNumberOfVisits());
         return newsRepository.updateNews(news);
     }
+
 
     public News getNewsById(int id){
         return newsRepository.getNewsById(id);

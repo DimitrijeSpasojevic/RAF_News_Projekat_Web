@@ -20,6 +20,8 @@ public interface NewsRepository {
 
     News updateNews(News news);
 
+    News updateNumberOfVisits(News news);
+
     News getNewsById(int id);
 
     List<News> getAllNewsWithTag(String keyWord);

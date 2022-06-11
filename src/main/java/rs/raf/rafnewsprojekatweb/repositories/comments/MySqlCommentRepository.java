@@ -19,7 +19,7 @@ public class MySqlCommentRepository extends MySqlAbstractRepository implements C
             connection = this.newConnection();
 
 
-            preparedStatement = connection.prepareStatement("SELECT * FROM comments where news_id = ?");
+            preparedStatement = connection.prepareStatement("SELECT * FROM comments where news_id = ? ORDER BY date DESC");
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
 

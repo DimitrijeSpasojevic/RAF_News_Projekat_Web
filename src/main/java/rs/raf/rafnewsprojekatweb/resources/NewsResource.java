@@ -44,7 +44,7 @@ public class NewsResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public News getNewsById(@PathParam("id") Integer id) {
-        return newsService.getNewsById(id);
+        return newsService.updateNumberOfVisits(newsService.getNewsById(id));
     }
 
     @POST
